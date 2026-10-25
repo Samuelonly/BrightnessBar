@@ -48,6 +48,11 @@ chmod +x make-app.sh
 
 也可以只跑 `swift build -c release`，直接运行 `.build/release/BrightnessBar`。
 
+## 下载 / Download
+
+- 安装包 / Package: [dist/BrightnessBar-1.0.1-arm64.dmg](dist/BrightnessBar-1.0.1-arm64.dmg)（仅 Apple Silicon，macOS 13+ / Apple Silicon only, macOS 13+）
+- 或到 / Or visit: [Releases](https://github.com/Samuelonly/BrightnessBar/releases)
+
 ## 实现说明 / Implementation Notes
 
 - 内置屏：DisplayServices 私有框架（`DisplayServicesGetBrightness` /

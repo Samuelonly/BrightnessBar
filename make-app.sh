@@ -1,12 +1,15 @@
 #!/bin/bash
-# Build BrightnessBar and assemble a runnable .app bundle.
+# Build BrightnessBar and assemble a runnable .app bundle + dmg (arm64 only).
 set -euo pipefail
 cd "$(dirname "$0")"
+
+VERSION="1.0.1"
 
 swift build -c release
 
 APP="build/BrightnessBar.app"
-rm -rf "$APP"
+DMG="build/BrightnessBar-$VERSION-arm64.dmg"
+rm -rf "$APP" "$DMG"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp .build/release/BrightnessBar "$APP/Contents/MacOS/BrightnessBar"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
@@ -22,8 +25,8 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
     <key>CFBundleDisplayName</key><string>屏幕亮度</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>1.0</string>
-    <key>CFBundleVersion</key><string>1</string>
+    <key>CFBundleShortVersionString</key><string>1.0.1</string>
+    <key>CFBundleVersion</key><string>1.0.1</string>
     <key>LSMinimumSystemVersion</key><string>13.0</string>
     <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
@@ -34,7 +37,10 @@ PLIST
 
 codesign --force --sign - "$APP"
 
+hdiutil create -volname BrightnessBar -srcfolder "$APP" -ov -format UDZO "$DMG" >/dev/null
+
 echo
 echo "完成：$APP"
+echo "安装包：$DMG"
 echo "运行测试：open \"$APP\""
 echo "长期使用：把 $APP 拖到「应用程序」，并在 系统设置 → 通用 → 登录项 中添加它。"
